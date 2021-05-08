@@ -1,3 +1,4 @@
+import tensorflow as tf
 import tensorflow_datasets as tfds
 import numpy as np
 from pathlib import Path
@@ -36,17 +37,17 @@ for id,im,lbl in iter(test_save):
     f.write(data)
     f.close()
 
- valid_save = ds_valid.map(lambda x: (x['id'],x['image'],x['label']))
- dir = 'cbis-ddsm-patches/valid'
+valid_save = ds_valid.map(lambda x: (x['id'],x['image'],x['label']))
+dir = 'cbis-ddsm-patches/valid'
 
- for id,im,lbl in iter(valid_save):
-     id = id.numpy().decode('utf-8')
-     data = tf.io.encode_png(im).numpy()
-     folder = info.features["label"].int2str(lbl.numpy())
-     fname = '-'.join( id.split('/')) + '.png'
-     fdir = '/'.join([dir,folder,fname])
-     fdir = Path(fdir)
-     if not fdir.parent.exists(): fdir.parent.mkdir(parents=True)
-     f = fdir.open('wb')
-     f.write(data)
-     f.close()
+for id,im,lbl in iter(valid_save):
+    id = id.numpy().decode('utf-8')
+    data = tf.io.encode_png(im).numpy()
+    folder = info.features["label"].int2str(lbl.numpy())
+    fname = '-'.join( id.split('/')) + '.png'
+    fdir = '/'.join([dir,folder,fname])
+    fdir = Path(fdir)
+    if not fdir.parent.exists(): fdir.parent.mkdir(parents=True)
+    f = fdir.open('wb')
+    f.write(data)
+    f.close()
